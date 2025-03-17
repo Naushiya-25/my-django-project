@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  
+  <style>
+    /* General Body Styling */
+    body {
+      font-family: 'Poppins', sans-serif; 
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(0, 102, 204, 0.7)), url('https://cimages.milaap.org/milaap/image/upload/c_fill,g_faces,h_452,w_603/v1593526115/production/images/campaign/189805/images_11_ag0kcl_1593526717.jpg');
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+    }
+  
+    /* Navbar Styling */
+    .navbar {
+      width: 100%;
+      background-color: #0066cc; /* Solid color for navbar */
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;  /* Ensure navbar stays on top of other content */
+    }
+  
+    .navbar .greeting {
+      color: white;
+      font-size: 1.3rem;
+      font-weight: 500;
+    }
+  
+    .navbar .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .navbar .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .navbar .nav-links a:hover {
+      text-decoration: underline;
+    }
+  
+    .navbar .logout-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    /* Add !important for critical properties to ensure they're not overridden */
+    width: auto !important;
+    transform: none !important; 
+  }
+
+  .navbar .logout-btn:hover {
+      background-color: #c0392b;
+  }
+    /* Container for Main Content */
+    .container {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 40px;
+      border-radius: 15px;
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      margin-top: 120px; /* Adjusted to provide space below navbar */
+    }
+  
+    h1 {
+      color: #333;
+      margin-bottom: 40px;
+      font-size: 2.5rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+  
+    .dashboard-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 100%;
+      gap: 20px;
+    }
+  
+    /* Card Styling */
+    .card {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+  
+    .card:hover {
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      transform: translateY(-5px);
+    }
+  
+    .card img {
+      width: 40%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+  
+    .card-content {
+      width: 55%;
+    }
+  
+    .card a {
+      display: block;
+      text-decoration: underline;
+      color: #007bff;
+      font-weight: 500;
+    }
+  
+    .card a:hover {
+      color: #0056b3;
+    }
+  
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+      }
+  
+      .navbar .greeting {
+        margin-bottom: 10px;
+      }
+  
+      .container {
+        margin-top: 140px; /* Increased space for mobile */
+        padding: 20px;
+        width: 100%;
+      }
+  
+      .card {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        width: 100%;
+      }
+  
+      .card img {
+        width: 70%;
+        max-width: 300px;
+      }
+  
+      .card-content {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  
+  </style>
+  
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="greeting">
+      Hi, {{ user_name }}!  <!-- This will display the user's first name -->
+    </div>
+    <div class="nav-links">
+      <a href="{% url 'myreport' %}">My Reports</a>  <!-- My Reports button -->
+    </div>
+    <button class="logout-btn" onclick="window.location.href='/logout/'">Logout</button>
+  </div>
+
+  <!-- Main Content -->
+   {% block content %}
+   {% endblock %}
+ 
+  {% if messages %}
+  {% for message in messages %}
+    {% if message.tags == 'success' %}
+      <script>
+        Swal.fire("Success!!", "{{ message }}", "success");
+      </script>
+    {% else %}
+      <script>
+        Swal.fire("Oops!", "{{ message }}", "error");
+      </script>
+    {% endif %}
+  {% endfor %}
+  {% endif %}
+
+</body>
+</html>

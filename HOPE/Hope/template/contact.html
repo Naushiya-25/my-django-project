@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<style>
+    .section {
+        padding: 50px 20px;
+        text-align: center;
+        font-size: 1.2rem;
+        color: #333;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        margin: 40px auto;
+        max-width: 900px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<section class="section">
+    <h2>Contact</h2>
+    <p>For inquiries or to learn how you can help, email us at <a
+            href="mailto:contact@pawprintsofhope.com">contact@pawprintsofhope.com</a>.</p>
+</section>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'hospital/hospitalbase.html' %}
+{% load static %}
+{% block content %}
+
+<table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Animal Image</th>
+        <th>Animal Details</th>
+        <th>Rescuer Name</th>
+        <th>Phone Number</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for report in reports %}
+        <tr>
+          <td>
+            {% if report.animal_image %}
+                <img src="{{ report.animal_image.url }}" alt="Animal Image" width="70" />
+            {% else %}
+                No Image Available
+            {% endif %}
+          </td>
+          <td>{{ report.animal_details }}</td>
+          <td>{{ report.rescuer_name }}</td>
+          <td>{{ report.phone_number }}</td>
+          <td>{{ report.get_status_display }}</td> 
+          <td>
+            <form method="POST" action="{% url 'vetdashboard' %}">
+                {% csrf_token %}
+                <input type="hidden" name="report_token" value="{{ report.token }}">
+                <select name="status" class="form-control">
+                    <option value="PENDING" {% if report.status == 'PENDING' %}selected{% endif %}>Pending</option>
+                    <option value="IN_TREATMENT" {% if report.status == 'IN_TREATMENT' %}selected{% endif %}>In Treatment</option>
+                    <option value="COMPLETED" {% if report.status == 'COMPLETED' %}selected{% endif %}>Completed</option>
+                </select>
+                <button type="submit" class="btn btn-outline-primary btn-sm mt-2">
+                    Update Status
+                </button>
+            </form>
+
+            {% if report.status == 'IN_TREATMENT' %}
+                <a href="{% url 'treatment_create' report.token %}">
+                    <button class="btn btn-outline-success">
+                        <i class="fab fa-paypal"></i>
+                        Submit Treatment
+                    </button>
+                </a>
+            {% else %}
+                <button class="btn btn-outline-success" disabled>
+                    <i class="fab fa-paypal"></i>
+                    Submit Treatment
+                </button>
+            {% endif %}
+
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="7">No reports available.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+{% endblock %}

@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Our Platform</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" type="text/css">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <h1>Pawprints of Hope Rescue</h1>
+        </div>
+    
+        <nav>
+            <ul>
+                <!-- Home link, will be hidden on homepage -->
+                <li class="{% if request.path == '/home/' %}hidden{% endif %}">
+                    <a href="{% url 'home' %}">Home</a>
+                </li>
+                
+                <!-- About Us link, will be hidden on the about page -->
+                <li class="{% if request.path == '/about/' %}hidden{% endif %}">
+                    <a href="{% url 'about' %}">About Us</a>
+                </li>
+    
+                <!-- Other nav items -->
+                <li class="{% if request.path == '/contact/' %}hidden{% endif %}">
+                    <a href="{% url 'contact' %}">Contact</a>
+                </li>
+                <li class="{% if request.path == '/approach/' %}hidden{% endif %}">
+                    <a href="{% url 'approach' %}">Our Approach</a>
+                </li>
+                <li class="{% if request.path == '/what-we-do/' %}hidden{% endif %}">
+                    <a href="{% url 'whatwedo' %}">What We Do</a>
+                </li>
+                <li class="{% if request.path == '/login/' %}hidden{% endif %}">
+                    <a href="{% url 'logintype' %}">Login</a>
+                </li>
+                <li class="{% if request.path == '/donate/' %}hidden{% endif %}">
+                    <a href="{% url 'donate' %}">Donate</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    
+    {% block content %}
+    {% endblock %}
+
+    
+    <footer>
+        <p>&copy; 2024 Pawprints of Hope Rescue. All rights reserved.</p>
+        <nav>
+            <ul>
+                <li><a href="{% url 'about' %}">About Us</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+                <li><a href="{% url 'approach' %}">Our Approach</a></li>
+                <li><a href="{% url 'whatwedo' %}">What We Do</a></li>
+                <li><a href="{% url 'logintype' %}">Login</a></li>
+                <li><a href="{% url 'donate' %}">Donate</a></li>
+            </ul>
+        </nav>
+    </footer>
+
+</body>
+</html>

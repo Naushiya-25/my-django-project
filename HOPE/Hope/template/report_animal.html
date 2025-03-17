@@ -1,0 +1,226 @@
+{% extends 'userbase.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Stray Animal</title>
+  <style>
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #218838;
+      transform: translateY(-3px);
+    }
+
+    #openCamera {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    #videoContainer {
+      margin-top: 20px;
+      position: relative;
+      display: none;
+    }
+
+    #camera {
+      width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    #capturedImagePreview {
+      display: none;
+      margin-top: 20px;
+      width: 100%;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .clear-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 16px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      display: none;
+    }
+  </style>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Report Stray Animal</h2>
+    <form id="reportForm" action="{% url 'animal_report' %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="rescuer">Rescuer Name</label>
+        <input type="text" id="rescuer" name="rescuer" placeholder="Enter your Name..." required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Customer Phone</label>
+        <input type="text" id="phone" name="phone" placeholder="Enter 10-digit Phone Number" maxlength="10" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+        <small id="phoneError">Please enter a valid 10-digit phone number.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="hospital">Hospital/Clinic</label>
+        <select id="hospital" name="hospital" required>
+          <option value="">Select a Hospital</option>
+          {% for hospital in hospitals %}
+            <option value="{{ hospital.id }}">{{ hospital.hospital_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="details">Details</label>
+        <textarea id="details" name="details" rows="4" placeholder="Add Details.." required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="image">Upload Image</label>
+        <input type="file" id="image" name="image">
+      </div>
+
+      <div class="form-group">
+        <label>Capture Live Image</label>
+        <button type="button" id="openCamera">Open Camera</button>
+        <div id="videoContainer">
+          <video id="camera" autoplay></video>
+          <canvas id="snapshot" style="display:none;"></canvas>
+          <img id="capturedImagePreview" alt="Captured Image">
+          <button class="clear-btn" id="clearImage">X</button>
+        </div>
+        <input type="hidden" id="capturedImage" name="capturedImage">
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  {% if messages %}
+  {% for message in messages %}
+    {% if message.tags == 'success' %}
+      <script>
+        Swal.fire("Success!!", "{{ message }}", "success");
+      </script>
+    {% else %}
+      <script>
+        Swal.fire("Oops!", "{{ message }}", "error");
+      </script>
+    {% endif %}
+  {% endfor %}
+  {% endif %}
+
+<script>
+  document.getElementById('openCamera').addEventListener('click', function () {
+    const videoContainer = document.getElementById('videoContainer');
+    const camera = document.getElementById('camera');
+    const snapshotCanvas = document.getElementById('snapshot');
+    const capturedImagePreview = document.getElementById('capturedImagePreview');
+    const clearImage = document.getElementById('clearImage');
+    const capturedImageInput = document.getElementById('capturedImage');
+    const imageInput = document.getElementById('image');
+
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        // Start the camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                camera.srcObject = stream;
+                videoContainer.style.display = 'block';
+            })
+            .catch(function (error) {
+                alert('Error accessing the camera: ' + error);
+            });
+    } else {
+        alert('Your browser does not support camera access');
+    }
+
+    // Capture the image when clicking the video
+    camera.addEventListener('click', function () {
+        snapshotCanvas.width = camera.videoWidth;
+        snapshotCanvas.height = camera.videoHeight;
+        const context = snapshotCanvas.getContext('2d');
+        context.drawImage(camera, 0, 0, snapshotCanvas.width, snapshotCanvas.height);
+
+        // Show captured image preview
+        const dataUrl = snapshotCanvas.toDataURL('image/png');
+        capturedImagePreview.src = dataUrl;
+        capturedImagePreview.style.display = 'block';
+
+        // Convert the data URL to a Blob and simulate file input
+        fetch(dataUrl)
+            .then(res => res.blob())
+            .then(blob => {
+                const file = new File([blob], "captured_image.png", { type: 'image/png' });
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                imageInput.files = dataTransfer.files;
+                capturedImageInput.value = dataUrl;  // Store the captured image data URL in the hidden input field
+            });
+    });
+
+    // Clear the captured image
+    clearImage.addEventListener('click', function () {
+        capturedImagePreview.style.display = 'none';
+        snapshotCanvas.width = 0;
+        snapshotCanvas.height = 0;
+        capturedImageInput.value = '';  // Clear the hidden input field
+        imageInput.value = '';  // Clear the file input field
+    });
+});
+</script>
+
+</body>
+</html>
+
+{% endblock %}

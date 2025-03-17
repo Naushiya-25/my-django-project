@@ -1,0 +1,264 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.5)), url('https://pawstinleypark.org/wp-content/uploads/2021/01/lost_pets.jpg');
+    background-size: cover;
+    background-position: center;
+    /* Removed padding-top: 80px */
+}
+
+/* Header styling */
+header {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    height: auto;
+}
+
+/* Logo styling */
+.logo {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #fff;
+    animation: fadeInLogo 2s ease-in-out;
+}
+
+.logo img {
+    width: 150px;
+    height: auto;
+    animation: fadeInLogo 2s ease-in-out;
+}
+
+/* Loading spinner and message */
+.loading-message {
+    font-size: 1.5rem;
+    color: #fff;
+    margin-top: 20px;
+    animation: fadeInMessage 2s ease-in-out;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #28a745;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+    margin: 20px auto;
+}
+
+/* Keyframes for spinner and fadeIn effects */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeInLogo {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInMessage {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+/* Navbar styles */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+
+nav ul li {
+    margin: 10px 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 1.1rem;
+    font-weight: normal;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #0056b3;
+}
+
+nav ul li.active a {
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul li {
+        margin: 5px 0;
+    }
+}
+
+/* Sticky Footer */
+footer {
+    background-color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    padding: 15px;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+    bottom: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+footer p {
+    color: #333;
+    font-size: 1rem;
+}
+
+footer nav ul {
+    list-style-type: none;
+    padding: 10px;
+}
+
+footer nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+footer nav ul li a {
+    text-decoration: none;
+    color: #007bff;
+    transition: color 0.3s ease;
+}
+
+footer nav ul li a:hover {
+    color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    footer nav ul {
+        padding: 0;
+    }
+
+    footer nav ul li {
+        display: block;
+        margin: 10px 0;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Page Section Styling */
+.section {
+    padding: 50px 20px;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    margin: 40px auto;
+    max-width: 900px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    font-size: 2rem;
+    color: #2f4f4f;
+    margin-bottom: 20px;
+}
+
+h3 {
+    color: #28a745;
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+}
+
+p {
+    line-height: 1.8;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.logo h1 {
+    font-size: 2.5rem;
+    color: #2f4f4f;
+}
+
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+    .welcome-section {
+        width: 90%;
+        padding: 30px 15px;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+
+    nav ul li {
+        display: block;
+        margin: 10px 0;
+    }
+}

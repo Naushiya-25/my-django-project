@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Login</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif; 
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(0, 102, 204, 0.7)), url('https://i.natgeofe.com/n/c322f3cc-118e-4265-9c43-1799d038fd3c/india-stray-dogs-1.jpg?w=1280&h=853');
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .form-container {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 50px;
+      border-radius: 15px;
+      width: 400px;
+      margin: 150px auto;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      transition: all 0.5s ease-in-out;
+    }
+
+    h2 {
+      color: #2f4f4f;
+      margin-bottom: 30px;
+      font-size: 2.5rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input[type="email"], input[type="password"] {
+      width: 90%;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    .btn {
+      width: 95%;
+      padding: 15px;
+      background: linear-gradient(135deg, #28a745, #218838);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #218838;
+      transform: translateY(-5px);
+    }
+
+    .toggle-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .toggle-link a {
+      color: #007bff;
+      text-decoration: underline;
+      font-size: larger;
+    }
+
+    .toggle-link a:hover {
+      text-decoration: underline;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Hospital Login</h2>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="Enter Your Email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter Password" required>
+      </div>
+      <button type="submit" class="btn">Login</button>
+      <div class="toggle-link">
+        <a href="{% url 'hospital_signup' %}">Don't have an account? Sign Up</a>
+      </div>
+    </form>
+
+    {% if messages %}
+      {% for message in messages %}
+        {% if message.tags == 'error' %}
+          <script>
+            Swal.fire("Oops!", "{{ message }}", "error");
+          </script>
+        {% elif message.tags == 'success' %}
+          <script>
+            Swal.fire("Success!!", "{{ message }}", "success");
+          </script>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</body>
+</html>

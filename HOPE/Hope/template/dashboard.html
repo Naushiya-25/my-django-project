@@ -1,0 +1,40 @@
+{% extends 'userbase.html' %}
+{% block content %}
+
+
+<div class="container">
+  <h1>Welcome to the Dashboard</h1>
+
+  <div class="dashboard-content">
+    <div class="card">
+      <img src="https://preview.redd.it/3ljahsymu9821.jpg?width=1080&crop=smart&auto=webp&s=314ba90fde28c1ae65cdaef4600d58f19cc2e6e1" alt="Stray dog">
+      <div class="card-content">
+        <a href="{% url 'animal_report' %}">Report a Stray Animal</a>
+        <p>If you come across a stray or injured animal that needs help, our Report an Animal in Need feature allows you to take quick action...</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://s3.youthkiawaaz.com/wp-content/uploads/2019/04/06192707/mother-dog-puppies-wiki-2.jpg" alt="Stray Cat">
+      <div class="card-content">
+        <a href="{% url 'donate' %}">Donate for Treatment</a>
+        <p>Your generosity can save lives! Through our Donation feature, you can make a direct impact by contributing to the treatment of animals in urgent need...</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% if messages %}
+{% for message in messages %}
+  {% if message.tags == 'success' %}
+    <script>
+      Swal.fire("Success!!", "{{ message }}", "success");
+    </script>
+  {% else %}
+    <script>
+      Swal.fire("Oops!", "{{ message }}", "error");
+    </script>
+  {% endif %}
+{% endfor %}
+{% endif %}
+
+{% endblock %}

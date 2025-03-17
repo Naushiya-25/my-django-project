@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading...</title>
+  <link rel="stylesheet" href="{% static 'css/index.css' %}" type="text/css">
+</head>
+<body>
+  
+  <div class="logo">
+    <img src="{% static 'img/logo.png' %}" alt="Pawprints of Hope Rescue Logo">
+    <h1>Pawprints of Hope Rescue</h1>
+  </div>
+
+ 
+  <div class="spinner"></div>
+  <div class="loading-message">The homepage is opening...</div>
+
+  <script>
+    
+    setTimeout(() => {
+      window.location.href = "{% url 'home' %}"; 
+    }, 4000); // 4 seconds
+  </script>
+</body>
+</html>

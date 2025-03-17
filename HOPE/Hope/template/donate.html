@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<style>
+    .container {
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 40px;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 800px;
+        margin: 40px auto;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+        color: #333;
+        font-size: 2rem;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    p {
+        color: #555;
+        font-size: 1.1rem;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+    }
+    input, textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+    .payment-method-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+    }
+    button {
+        width: 100%;
+        padding: 12px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        margin-top: 20px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    button:hover {
+        background-color: #218838;
+        transform: translateY(-5px);
+    }
+    .secure-payment {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 0.9rem;
+        color: #666;
+    }
+    .testimonials {
+        margin-top: 30px;
+        padding: 15px;
+        background: #f9f9f9;
+        border-left: 5px solid #28a745;
+        border-radius: 5px;
+        font-size: 1rem;
+        color: #333;
+    }
+    .testimonials p {
+        margin-bottom: 10px;
+        font-style: italic;
+    }
+    .testimonials strong {
+        display: block;
+        margin-top: 10px;
+        font-size: 1rem;
+        color: #007bff;
+    }
+</style>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<div class="container">
+    <h2>Donate for Animal Treatment</h2>
+
+    <p>Your donation directly helps provide treatment for stray animals in need. Together, we can save lives!</p>
+
+    <form id="donationForm">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="amount">Enter Custom Amount</label>
+            <input type="number" id="amount" name="amount" placeholder="₹ 0.00" required>
+        </div>
+
+        <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter Your Name" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter Your Email" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="text" id="phone" name="phone" maxlength="10" placeholder="Enter Your Phone Number" required
+                oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+        </div>
+        <div class="payment-method-group">
+            <h3>Select Payment Method</h3>
+            <label>
+                <input type="radio" name="payment-method" value="UPI" required> UPI
+            </label>
+            <label>
+                <input type="radio" name="payment-method" value="CreditDebitCard" required> Credit/Debit Card
+            </label>
+            <label>
+                <input type="radio" name="payment-method" value="PayPal" required> PayPal
+            </label>
+        </div>
+        <button type="button" class="btn" onclick="payNow()">Donate Now</button>
+    </form>
+
+    <p class="secure-payment">Your payment is 100% secure and encrypted.</p>
+</div>
+{% if messages %}
+{% for message in messages %}
+  {% if message.tags == 'success' %}
+    <script>
+      Swal.fire("Success!!", "{{ message }}", "success");
+    </script>
+  {% else %}
+    <script>
+      Swal.fire("Oops!", "{{ message }}", "error");
+    </script>
+  {% endif %}
+{% endfor %}
+{% endif %}
+
+<script>
+    function payNow() {
+        var donationForm = document.getElementById('donationForm');
+        var amount = document.getElementById('amount').value;
+        var name = document.getElementById('name').value;
+        var email = document.getElementById('email').value;
+        var phone = document.getElementById('phone').value;
+
+        // Send donation details to the server to create an order with Razorpay
+        fetch("{% url 'donate' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({
+                amount: amount,
+                name: name,
+                email: email,
+                phone: phone,
+                payment_method: 'CreditDebitCard'  // Set the payment method to CreditCard for simplicity
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                var options = {
+                    "key": data.razorpay_key,
+                    "amount": amount * 100, // Amount is in paise
+                    "currency": "INR",
+                    "name": "Animal Treatment Donation",
+                    "description": "Donate to treat stray animals",
+                    "order_id": data.order_id,
+                    "handler": function(response) {
+                        alert('Payment Successful!');
+                        // Optionally, handle the successful payment here (e.g., update the database)
+                    },
+                    "prefill": {
+                        "name": name,
+                        "email": email,
+                        "contact": phone
+                    },
+                    "theme": {
+                        "color": "#28a745"
+                    }
+                };
+
+                var razorpay = new Razorpay(options);
+                razorpay.open();
+            } else {
+                alert('Error creating Razorpay order');
+            }
+        });
+    }
+</script>
+
+
+{% endblock %}

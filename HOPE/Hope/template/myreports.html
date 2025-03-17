@@ -1,0 +1,115 @@
+{% extends 'userbase.html' %}
+{% block content %}
+
+<div class="container">
+    <h2>Your Animal Reports</h2>
+
+    {% if reports %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Hospital</th>
+                    <th>Animal Details</th>
+                    <th>Animal Image</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ report.hospital.hospital_name }}</td>
+                    <td>{{ report.animal_details|slice:":100" }}...</td>  <!-- Shows first 100 characters of the details -->
+                    <td>
+                        {% if report.animal_image %}
+                            <img src="{{ report.animal_image.url }}" alt="Animal Image" style="width: 50px; height: 50px; object-fit: cover;">
+                        {% else %}
+                            No Image
+                        {% endif %}
+                    </td>
+                    <td>{{ report.status }}</td>
+                    <td>{{ report.created_at|date:"Y-m-d H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No reports found.</p>
+    {% endif %}
+</div>
+
+<!-- Add Custom CSS for Table Styling -->
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        color: #333;
+        text-align: center;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #f9f9f9;
+    }
+
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #28a745;
+        color: white;
+        font-size: 1.1rem;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #eaeaea;
+    }
+
+    td img {
+        border-radius: 5px;
+        object-fit: cover;
+    }
+
+    .table-bordered {
+        border: 1px solid #ddd;
+    }
+
+    .table-bordered th, .table-bordered td {
+        border: 1px solid #ddd;
+    }
+
+    .table-bordered tr:first-child th,
+    .table-bordered tr:first-child td {
+        border-top: 1px solid #28a745;
+    }
+
+    .table-bordered tr:last-child td {
+        border-bottom: 1px solid #28a745;
+    }
+
+    .table td, .table th {
+        vertical-align: middle;
+    }
+
+    .no-image {
+        color: #999;
+        font-style: italic;
+    }
+</style>
+
+{% endblock %}

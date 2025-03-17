@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choose Login Type</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif; 
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(0, 102, 204, 0.7)), url('https://i.natgeofe.com/n/c322f3cc-118e-4265-9c43-1799d038fd3c/india-stray-dogs-1.jpg?w=1280&h=853');
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .selection-container {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 50px;
+      border-radius: 15px;
+      width: 450px;
+      margin: 150px auto;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      transition: all 0.5s ease-in-out;
+    }
+
+    h2 {
+      color: #2f4f4f;
+      margin-bottom: 30px;
+      font-size: 2.5rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    .selection-buttons {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin-top: 30px;
+      gap: 30px;
+    }
+
+    .selection-buttons a {
+      text-decoration: none;
+      width: 160px;
+      padding: 25px;
+      border-radius: 15px;
+      color: #fff;
+      background: linear-gradient(135deg, #28a745, #218838);
+      text-align: center;
+      font-size: 1.2rem;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .selection-buttons a:hover {
+      background-color: #218838;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .icon-container {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      background-color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .icon-container img {
+      width: 60%;
+      height: 60%;
+      border-radius: 50%;
+    }
+
+    .selection-button-text {
+      font-size: 1.2rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .selection-buttons a:active {
+      background-color: #19692c;
+    }
+
+  
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <div class="selection-container">
+    <h2>Who are you?</h2>
+    <div class="selection-buttons">
+      <a href="{% url 'login' %}">
+        <div class="icon-container">
+          <img src="https://img.icons8.com/ios/452/user.png" alt="Citizen Icon">
+        </div>
+        <div class="selection-button-text">Citizen</div>
+      </a>
+      
+      <a href="{% url 'vetlogin' %}">
+        <div class="icon-container">
+          <img src="https://img.icons8.com/ios/452/veterinarian.png" alt="Vet Icon">
+        </div>
+        <div class="selection-button-text">Vet Hospital</div>
+      </a>
+    </div>
+    {% if messages %}
+      {% for message in messages %}
+        {% if message.tags == 'success' %}
+          <script>
+            Swal.fire("Success!!", "{{ message }}", "success");
+          </script>
+        {% else %}
+          <script>
+            Swal.fire("Oops!", "{{ message }}", "error");
+          </script>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</body>
+
+</html>
+

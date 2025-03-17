@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<style>
+    .section {
+      padding: 40px;
+      text-align: center;
+      font-size: 1.2rem;
+      color: #333;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      margin: 40px auto;
+      max-width: 1200px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      font-size: 2rem;
+      color: #2f4f4f;
+      margin-bottom: 20px;
+    }
+
+    p {
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+</style>
+<section class="section">
+    <h2>What We Do</h2>
+    <p>We rescue animals, provide medical treatment, and offer shelter to stray animals in need.</p>
+    <p><strong>1. Report Animals in Need:</strong> We provide a simple way for rescuers to report stray or injured animals, allowing others to support their treatment.</p>
+    <p><strong>2. Raise Funds for Treatment:</strong> With our secure donation platform, users can easily contribute to the medical care of animals that need urgent help.</p>
+    <p><strong>3. Track Donations:</strong> We maintain transparency by enabling donors to track how their contributions are being used and the status of the animals they’ve helped.</p>
+</section>
+
+{% endblock %}
